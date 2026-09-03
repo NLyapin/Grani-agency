@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   gsap.registerPlugin(ScrollTrigger);
 
+  initPhotoCarousel();
+
   /* ---------------- custom cursor ---------------- */
   const cursor = document.getElementById('cursor');
   const isTouch = window.matchMedia('(max-width: 900px)').matches;
@@ -157,5 +159,68 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') searchPanel.classList.remove('is-open');
   });
+
+  /* ---------------- photo carousel ---------------- */
+  // Изображения подтягиваются из assets/carousel/ через /api/carousel.
+  // Чтобы добавить или убрать фото из карусели — просто добавьте/удалите файл в этой папке.
+  function initPhotoCarousel() {
+    const section = document.getElementById('photoCarousel');
+    const track = document.getElementById('photoCarouselTrack');
+    if (!section || !track) return;
+
+    const FALLBACK_IMAGES = ['1.jpg', '2.jpeg', '3.JPG', '4.jpg', '5.png', '6.png'];
+    const PX_PER_SECOND = 60;
+
+    fetch('/api/carousel', { cache: 'no-store' })
+      .then(res => (res.ok ? res.json() : Promise.reject()))
+      .then(data => Array.isArray(data.images) && data.images.length ? data.images : Promise.reject())
+      .catch(() => FALLBACK_IMAGES)
+      .then(images => buildCarousel(images))
+      .catch(() => {});
+
+    function buildCarousel(images) {
+      if (!images || !images.length) return;
+
+      track.innerHTML = '';
+
+      // дублируем список дважды, чтобы лента прокручивалась бесшовно и начиналась заново
+      const loopImages = images.concat(images);
+
+      loopImages.forEach((name, i) => {
+        const slide = document.createElement('div');
+        slide.className = 'photo-carousel__slide';
+
+        const img = document.createElement('img');
+        img.src = `assets/carousel/${encodeURIComponent(name)}`;
+        img.alt = `Grani — фото с мероприятия ${(i % images.length) + 1}`;
+        img.loading = i < images.length ? 'eager' : 'lazy';
+        img.decoding = 'async';
+
+        slide.appendChild(img);
+        track.appendChild(slide);
+      });
+
+      section.hidden = false;
+
+      const imgs = Array.from(track.querySelectorAll('img'));
+      const whenLoaded = img => new Promise(resolve => {
+        if (img.complete) return resolve();
+        img.addEventListener('load', resolve, { once: true });
+        img.addEventListener('error', resolve, { once: true });
+      });
+      const safetyTimeout = new Promise(resolve => setTimeout(resolve, 4000));
+
+      Promise.race([Promise.all(imgs.map(whenLoaded)), safetyTimeout])
+        .then(() => {
+          const singleSetWidth = track.scrollWidth / 2;
+          const duration = Math.max(singleSetWidth / PX_PER_SECOND, 12);
+          track.style.animationDuration = `${duration}s`;
+          track.classList.add('is-ready');
+        });
+
+      track.addEventListener('mouseenter', () => track.classList.add('is-paused'));
+      track.addEventListener('mouseleave', () => track.classList.remove('is-paused'));
+    }
+  }
 
 });
