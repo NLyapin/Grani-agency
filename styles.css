@@ -199,71 +199,6 @@ input{ font-family: inherit; }
   padding-top: 10px;
 }
 
-/* ================= PHOTO CAROUSEL ================= */
-.photo-carousel{
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  background: var(--bg-soft);
-  border-bottom: 1px solid var(--line);
-}
-.photo-carousel[hidden]{ display: none; }
-.photo-carousel::before,
-.photo-carousel::after{
-  content: "";
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 60px;
-  z-index: 2;
-  pointer-events: none;
-}
-.photo-carousel::before{ left: 0; background: linear-gradient(90deg, var(--bg-soft), transparent); }
-.photo-carousel::after{ right: 0; background: linear-gradient(-90deg, var(--bg-soft), transparent); }
-
-.photo-carousel__track{
-  display: flex;
-  align-items: stretch;
-  width: max-content;
-  will-change: transform;
-  animation-name: carouselScroll;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-duration: 42s;
-  opacity: 0;
-  transition: opacity .6s ease;
-}
-.photo-carousel__track.is-ready{ opacity: 1; }
-.photo-carousel__track.is-paused{ animation-play-state: paused; }
-
-@keyframes carouselScroll{
-  from{ transform: translateX(0); }
-  to{ transform: translateX(-50%); }
-}
-
-.photo-carousel__slide{
-  flex: 0 0 auto;
-  height: 240px;
-  width: 340px;
-  position: relative;
-  border-right: 1px solid var(--line);
-  overflow: hidden;
-}
-.photo-carousel__slide img{
-  width: 100%; height: 100%;
-  object-fit: cover;
-  filter: grayscale(10%) brightness(0.86) saturate(1.05);
-  transform: scale(1.01);
-  transition: filter .5s ease, transform .6s ease;
-}
-.photo-carousel__slide:hover img{
-  filter: grayscale(0%) brightness(1) saturate(1.1);
-  transform: scale(1.05);
-}
-
-@media (max-width: 900px){
-  .photo-carousel__slide{ height: 160px; width: 220px; }
-}
-
 /* ================= TOPBAR ================= */
 .topbar{
   background: var(--gold-light);
@@ -418,16 +353,66 @@ input{ font-family: inherit; }
 .search-panel__close:hover{ color: var(--text); }
 
 /* ================= HERO ================= */
-.hero{ position: relative; background: var(--bg); }
-.hero__images{
-  display: grid;
-  grid-template-columns: 1fr 1.35fr 1fr;
+.hero{
+  position: relative;
+  background: var(--bg);
   height: 92vh;
   min-height: 560px;
+  overflow: hidden;
 }
-.hero__img{ position: relative; overflow: hidden; }
-.hero__img .ph{ transform: scale(1.12); transition: transform 1.2s cubic-bezier(.16,1,.3,1); }
-.hero__img:hover .ph{ transform: scale(1.0); }
+
+/* фон — карусель из assets/carousel/, см. script.js:initHeroCarousel */
+.hero__carousel{
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+.hero__carousel[hidden]{ display: none; }
+
+.hero__carousel-track{
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  width: max-content;
+  will-change: transform;
+  animation-name: carouselScroll;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: 70s;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+.hero__carousel-track.is-ready{ opacity: 1; }
+
+@keyframes carouselScroll{
+  from{ transform: translateX(0); }
+  to{ transform: translateX(-50%); }
+}
+
+.hero__carousel-slide{
+  flex: 0 0 auto;
+  height: 100%;
+  width: 46vw;
+  min-width: 340px;
+  max-width: 680px;
+  position: relative;
+}
+.hero__carousel-slide img{
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: brightness(0.6) saturate(1.05);
+}
+
+.hero__overlay{
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(10,9,8,0.35) 0%, rgba(10,9,8,0.2) 35%, rgba(10,9,8,0.75) 100%),
+    radial-gradient(ellipse at center, rgba(10,9,8,0.55) 0%, rgba(10,9,8,0.15) 60%);
+}
 
 .hero__content{
   position: absolute;
@@ -496,10 +481,8 @@ input{ font-family: inherit; }
 .hero__scroll p{ font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; margin: 0; }
 
 @media (max-width: 900px){
-  .hero__images{ grid-template-columns: 1fr; height: auto; }
-  .hero__img{ height: 46vh; }
-  .hero__img--center{ height: 78vh; }
-  .hero__img:not(.hero__img--center){ display: none; }
+  .hero{ height: 82vh; min-height: 520px; }
+  .hero__carousel-slide{ width: 100vw; min-width: 100vw; }
 }
 
 /* ================= SERVICES ================= */

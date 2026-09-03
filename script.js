@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  initPhotoCarousel();
+  initHeroCarousel();
 
   /* ---------------- custom cursor ---------------- */
   const cursor = document.getElementById('cursor');
@@ -55,15 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const heroTl = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
     heroTl
-      .to('.hero__img .ph', { opacity: 1, duration: 0.1 })
-      .fromTo('.hero__img', { clipPath: 'inset(0 0 100% 0)' }, {
-        clipPath: 'inset(0 0 0% 0)', duration: 1.2, stagger: 0.12
-      }, 0)
-      .from('.hero__script', { y: 24, opacity: 0, duration: 0.8 }, 0.6)
-      .from('.hero__title', { y: 40, opacity: 0, duration: 0.9 }, 0.7)
-      .from('.hero__plaque', { y: 20, opacity: 0, duration: 0.7 }, 0.95)
-      .from('.hero__content .btn', { y: 20, opacity: 0, duration: 0.7 }, 1.05)
-      .from('.hero__scroll', { opacity: 0, duration: 0.8 }, 1.2);
+      .from('.hero__script', { y: 24, opacity: 0, duration: 0.8 }, 0.1)
+      .from('.hero__title', { y: 40, opacity: 0, duration: 0.9 }, 0.2)
+      .from('.hero__plaque', { y: 20, opacity: 0, duration: 0.7 }, 0.45)
+      .from('.hero__content .btn', { y: 20, opacity: 0, duration: 0.7 }, 0.55)
+      .from('.hero__scroll', { opacity: 0, duration: 0.8 }, 0.7);
   }
 
   document.body.style.overflow = 'hidden';
@@ -160,16 +156,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape') searchPanel.classList.remove('is-open');
   });
 
-  /* ---------------- photo carousel ---------------- */
+  /* ---------------- hero background carousel ---------------- */
   // Изображения подтягиваются из assets/carousel/ через /api/carousel.
   // Чтобы добавить или убрать фото из карусели — просто добавьте/удалите файл в этой папке.
-  function initPhotoCarousel() {
-    const section = document.getElementById('photoCarousel');
-    const track = document.getElementById('photoCarouselTrack');
-    if (!section || !track) return;
+  function initHeroCarousel() {
+    const wrap = document.getElementById('heroCarousel');
+    const track = document.getElementById('heroCarouselTrack');
+    if (!wrap || !track) return;
 
     const FALLBACK_IMAGES = ['1.jpg', '2.jpeg', '3.JPG', '4.jpg', '5.png', '6.png'];
-    const PX_PER_SECOND = 60;
+    const PX_PER_SECOND = 40;
 
     fetch('/api/carousel', { cache: 'no-store' })
       .then(res => (res.ok ? res.json() : Promise.reject()))
@@ -188,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       loopImages.forEach((name, i) => {
         const slide = document.createElement('div');
-        slide.className = 'photo-carousel__slide';
+        slide.className = 'hero__carousel-slide';
 
         const img = document.createElement('img');
         img.src = `assets/carousel/${encodeURIComponent(name)}`;
@@ -200,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
         track.appendChild(slide);
       });
 
-      section.hidden = false;
+      wrap.hidden = false;
 
       const imgs = Array.from(track.querySelectorAll('img'));
       const whenLoaded = img => new Promise(resolve => {
@@ -213,13 +209,10 @@ document.addEventListener('DOMContentLoaded', () => {
       Promise.race([Promise.all(imgs.map(whenLoaded)), safetyTimeout])
         .then(() => {
           const singleSetWidth = track.scrollWidth / 2;
-          const duration = Math.max(singleSetWidth / PX_PER_SECOND, 12);
+          const duration = Math.max(singleSetWidth / PX_PER_SECOND, 20);
           track.style.animationDuration = `${duration}s`;
           track.classList.add('is-ready');
         });
-
-      track.addEventListener('mouseenter', () => track.classList.add('is-paused'));
-      track.addEventListener('mouseleave', () => track.classList.remove('is-paused'));
     }
   }
 

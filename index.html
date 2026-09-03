@@ -32,12 +32,6 @@
 
 <div id="top"></div>
 
-<!-- ================= PHOTO CAROUSEL ================= -->
-<!-- Изображения берутся из assets/carousel/ — просто добавьте или удалите файл в этой папке, и он появится/исчезнет в ленте. -->
-<section class="photo-carousel" id="photoCarousel" aria-label="Фотографии наших мероприятий" hidden>
-  <div class="photo-carousel__track" id="photoCarouselTrack"></div>
-</section>
-
 <!-- ================= TOPBAR ================= -->
 <div class="topbar">
   <div class="topbar__track">
@@ -88,24 +82,20 @@
 <main>
 
   <!-- ================= HERO ================= -->
+  <!-- Фон — карусель из assets/carousel/: добавьте/удалите файл в этой папке, и он появится/исчезнет здесь. -->
   <section class="hero" id="hero">
-    <div class="hero__images">
-      <div class="hero__img reveal-img" data-label="Свадьба">
-        <div class="ph ph--1"><span class="ph__label">Свадьба</span></div>
-      </div>
-      <div class="hero__img hero__img--center reveal-img" data-label="Корпоратив">
-        <div class="ph ph--2"><span class="ph__label">Корпоратив</span></div>
-        <div class="hero__content">
-          <p class="hero__script">Создаём</p>
-          <h1 class="hero__title">Незабываемые<br>события</h1>
-          <p class="hero__plaque">Свадьбы · Корпоративы · Выпускные</p>
-          <a href="#contacts" class="btn btn--light">Оставить заявку</a>
-        </div>
-      </div>
-      <div class="hero__img reveal-img" data-label="Фотозона">
-        <div class="ph ph--3"><span class="ph__label">Фотозона</span></div>
-      </div>
+    <div class="hero__carousel" id="heroCarousel" aria-hidden="true" hidden>
+      <div class="hero__carousel-track" id="heroCarouselTrack"></div>
     </div>
+    <div class="hero__overlay"></div>
+
+    <div class="hero__content">
+      <p class="hero__script">Создаём</p>
+      <h1 class="hero__title">Незабываемые<br>события</h1>
+      <p class="hero__plaque">Свадьбы · Корпоративы · Выпускные</p>
+      <a href="#contacts" class="btn btn--light">Оставить заявку</a>
+    </div>
+
     <div class="hero__scroll">
       <span></span>
       <p>Листайте вниз</p>
