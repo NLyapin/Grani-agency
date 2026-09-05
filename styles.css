@@ -159,7 +159,6 @@ input{ font-family: inherit; }
   transition: transform .45s cubic-bezier(.65,0,.35,1);
   z-index: 0;
 }
-.btn--light span, .btn--light{ z-index: 1; }
 .btn--light:hover::before{ transform: translateY(0); }
 .btn--light > *{ position: relative; z-index: 1; }
 
