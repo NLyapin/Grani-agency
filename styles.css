@@ -199,6 +199,15 @@ input{ font-family: inherit; }
   padding-top: 10px;
 }
 
+/* реальные фотографии вместо плейсхолдера — та же оболочка .ph, без декоративной штриховки */
+.ph--photo{ background: var(--ph-1); }
+.ph--photo::before, .ph--photo::after{ content: none; }
+.ph__photo{
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 /* ================= TOPBAR ================= */
 .topbar{
   background: var(--gold-light);
