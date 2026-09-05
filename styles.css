@@ -2,6 +2,14 @@
    GRANI — event agency, single page
    ============================================================ */
 
+@font-face{
+  font-family: 'MAK';
+  src: url('fonts/MAK.otf') format('opentype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root{
   --bg:            #0a0908;
   --bg-soft:       #121110;
@@ -16,7 +24,7 @@
   --line:          rgba(244, 238, 227, 0.14);
   --line-strong:   rgba(244, 238, 227, 0.28);
 
-  --font-serif:    'Cormorant Garamond', 'Times New Roman', serif;
+  --font-serif:    'MAK', 'Cormorant Garamond', 'Times New Roman', serif;
   --font-script:   'Marck Script', cursive;
   --font-sans:     'Montserrat', Arial, sans-serif;
 
